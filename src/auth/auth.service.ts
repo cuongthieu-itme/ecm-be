@@ -55,7 +55,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const { password: _, ...userWithoutPassword } = user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
     const tokens = await this.generateTokens(user.id, user.email);
     return { user: userWithoutPassword, ...tokens };
   }
