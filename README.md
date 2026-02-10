@@ -1,98 +1,254 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# ECM Backend - B2C Ecommerce API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend API cho ứng dụng Ecommerce B2C, xây dựng trên NestJS 11 + Prisma 7 + MySQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tech Stack
 
-## Description
+- **Framework:** NestJS 11
+- **ORM:** Prisma 7 (với `@prisma/adapter-mariadb`)
+- **Database:** MySQL
+- **Auth:** JWT + Passport
+- **Docs:** Swagger (OpenAPI)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Yêu cầu
 
-## Project setup
+- Node.js >= 18
+- MySQL >= 8.0
+- npm >= 9
+
+## Cài đặt và chạy dự án
+
+### 1. Clone và cài dependencies
 
 ```bash
-$ yarn install
+git clone <repo-url>
+cd ecm-be
+npm install
 ```
 
-## Compile and run the project
+### 2. Cấu hình environment
+
+Copy file `.env.example` thành `.env` và cập nhật thông tin kết nối:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+Nội dung `.env`:
+
+```env
+DATABASE_URL="mysql://root:password@localhost:3306/ecm_db"
+
+JWT_SECRET="your-jwt-secret-key"
+JWT_EXPIRES_IN="15m"
+JWT_REFRESH_EXPIRES_IN="7d"
+
+PORT=3000
+```
+
+### 3. Tạo database
+
+Tạo database MySQL trước khi chạy migration:
+
+```sql
+CREATE DATABASE ecm_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 4. Chạy Prisma migration
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+npx prisma migrate dev --name init
 ```
 
-## Deployment
+Lệnh này sẽ:
+- Tạo tất cả bảng trong database theo schema
+- Generate Prisma Client
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 5. Chạy server
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+# Development (hot-reload)
+npm run start:dev
+
+# Production
+npm run build
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 6. Truy cập
 
-## Resources
+- **API:** http://localhost:3000/api/v1
+- **Swagger Docs:** http://localhost:3000/api/docs
 
-Check out a few resources that may come in handy when working with NestJS:
+## Cấu trúc dự án
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+src/
+├── main.ts                     # Bootstrap, Swagger, ValidationPipe
+├── app.module.ts               # Root module
+├── prisma/                     # PrismaService (global)
+├── common/                     # Decorators, Guards, Filters, Interceptors, DTOs
+├── auth/                       # Register, Login, Refresh, Logout
+├── user/                       # Profile, Admin user list
+├── category/                   # CRUD categories
+├── product/                    # CRUD products (soft delete, search, filter)
+├── cart/                       # Cart management (upsert items)
+└── order/                      # Order creation (transaction), status management
+```
 
-## Support
+## API Endpoints
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Module   | Method | Path                     | Auth  |
+|----------|--------|--------------------------|-------|
+| Auth     | POST   | /auth/register           | -     |
+| Auth     | POST   | /auth/login              | -     |
+| Auth     | POST   | /auth/refresh            | -     |
+| Auth     | POST   | /auth/logout             | JWT   |
+| Users    | GET    | /users/me                | JWT   |
+| Users    | GET    | /users                   | ADMIN |
+| Category | GET    | /categories              | -     |
+| Category | GET    | /categories/:id          | -     |
+| Category | POST   | /categories              | ADMIN |
+| Category | PATCH  | /categories/:id          | ADMIN |
+| Category | DELETE | /categories/:id          | ADMIN |
+| Product  | GET    | /products                | -     |
+| Product  | GET    | /products/:id            | -     |
+| Product  | POST   | /products                | ADMIN |
+| Product  | PATCH  | /products/:id            | ADMIN |
+| Product  | DELETE | /products/:id            | ADMIN |
+| Cart     | GET    | /cart                    | JWT   |
+| Cart     | POST   | /cart/items              | JWT   |
+| Cart     | PATCH  | /cart/items/:id          | JWT   |
+| Cart     | DELETE | /cart/items/:id          | JWT   |
+| Cart     | DELETE | /cart                    | JWT   |
+| Order    | POST   | /orders                  | JWT   |
+| Order    | GET    | /orders                  | JWT   |
+| Order    | GET    | /orders/:id              | JWT   |
+| Order    | GET    | /orders/admin/all        | ADMIN |
+| Order    | PATCH  | /orders/:id/status       | ADMIN |
 
-## Stay in touch
+## Quy trình Prisma
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Prisma 7 - Lưu ý quan trọng
 
-## License
+Prisma 7 có thay đổi lớn so với các phiên bản trước:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Không dùng `url` trong `schema.prisma`** - URL kết nối database chỉ được cấu hình trong `prisma.config.ts`
+- **Bắt buộc dùng Driver Adapter** - PrismaClient cần truyền adapter trong constructor (ví dụ: `@prisma/adapter-mariadb` cho MySQL)
+- **Import path thay đổi** - Import từ `generated/prisma/client.js` thay vì `@prisma/client`
+
+### Thêm bảng mới / Cập nhật bảng
+
+**Bước 1:** Sửa file `prisma/schema.prisma`
+
+```prisma
+model NewTable {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("new_tables")  // tên bảng trong DB dùng snake_case
+}
+```
+
+**Bước 2:** Tạo migration
+
+```bash
+# Tạo migration mới (tự đặt tên mô tả thay đổi)
+npx prisma migrate dev --name add_new_table
+```
+
+**Bước 3:** Generate lại Prisma Client (nếu chỉ cần generate mà không migrate)
+
+```bash
+npx prisma generate
+```
+
+**Bước 4:** Sử dụng trong code
+
+```typescript
+// Import model types
+import { PrismaClient, NewTable } from '../../generated/prisma/client.js';
+
+// Sử dụng qua PrismaService (đã inject sẵn)
+const items = await this.prisma.newTable.findMany();
+```
+
+### Quy ước đặt tên trong schema
+
+| TypeScript (camelCase) | Database (snake_case) | Cách ánh xạ |
+|------------------------|-----------------------|-------------|
+| `createdAt`            | `created_at`          | `@map("created_at")` |
+| `userId`               | `user_id`             | `@map("user_id")` |
+| `CartItem` (model)     | `cart_items` (table)  | `@@map("cart_items")` |
+
+### Các lệnh Prisma thường dùng
+
+```bash
+# Tạo migration mới
+npx prisma migrate dev --name <ten_migration>
+
+# Generate Prisma Client (không migration)
+npx prisma generate
+
+# Xem trạng thái migration
+npx prisma migrate status
+
+# Reset database (xóa toàn bộ data + chạy lại migration)
+npx prisma migrate reset
+
+# Mở Prisma Studio (GUI xem data)
+npx prisma studio
+
+# Format schema file
+npx prisma format
+```
+
+### Sửa bảng đã có
+
+```prisma
+model Product {
+  // Thêm field mới
+  rating Float? @default(0)
+
+  // Thêm index mới
+  @@index([rating])
+}
+```
+
+Sau đó chạy:
+
+```bash
+npx prisma migrate dev --name add_rating_to_product
+```
+
+### Thêm quan hệ giữa các bảng
+
+```prisma
+model Review {
+  id        Int     @id @default(autoincrement())
+  content   String  @db.Text
+  rating    Int
+  userId    Int     @map("user_id")
+  productId Int     @map("product_id")
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("reviews")
+}
+
+// Nhớ thêm relation ngược ở model User và Product:
+// reviews Review[]
+```
+
+## Scripts
+
+```bash
+npm run build         # Build TypeScript
+npm run start:dev     # Chạy dev (hot-reload)
+npm run start:prod    # Chạy production
+npm run lint          # Lint code
+npm run format        # Format code
+```
